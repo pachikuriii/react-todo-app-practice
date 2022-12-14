@@ -49,15 +49,16 @@ class AppTable extends React.Component {
     );
   }
 }
-
-const TODOS = [
-  {content: 'Football'},
-  {content: 'Baseball'},
-  {content: 'Basketball'},
-  {content: 'iPod Touch'},
-  {content: 'iPhone 5'},
-  {content: 'Nexus 7'}
-];
  
+const STORAGE_KEY = 'react-todo'
+const todoStorage = {
+  fetch: function () {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+  },
+  save: function (todos) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+  }
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(<AppTable todos={TODOS} />);
+root.render(<AppTable todos={todoStorage.fetch()} />);
