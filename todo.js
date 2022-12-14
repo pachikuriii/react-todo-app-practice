@@ -4,7 +4,7 @@ class TodoRow extends React.Component {
     return (
       <li>{todo.content}
       <button>編集</button>
-      <button>削除</button>
+      <button onClick={() => this.props.deleteTodo(todo.id)}>削除</button>
       </li>
     );
   }
@@ -17,12 +17,14 @@ class TodoTable extends React.Component {
       rows.push(
         <TodoRow
           todo={todo}
-          key={todo.id} />
+          key={todo.id} 
+          deleteTodo={this.props.deleteTodo}
+          />
       );
     });
 
     return (
-        <ul>{rows}</ul>
+      <ul>{rows}</ul>
     );
   }
 }
@@ -51,6 +53,7 @@ class TodoInputForm extends React.Component {
     this.props.addMemo(this.state.content)
     this.setState({ content: "" });
   };
+
 }
 
 class AppTable extends React.Component {
@@ -67,11 +70,22 @@ class AppTable extends React.Component {
     this.setState({todos:this.state.todos});
   }
 
+  deleteTodo = id => {
+    const todo = this.state.todos.find((todo) => todo.id === id)
+    const index = this.state.todos.indexOf(todo)
+    const result = confirm('本当に削除しますか？')
+    if (result) {
+      this.state.todos.splice(index, 1)
+    }
+    todoStorage.save(this.state.todos)
+    this.setState({ todos: this.state.todos });
+  }
+
   render() {
     return (
       <div>
         <TodoInputForm addMemo={this.addMemo} />
-        <TodoTable todos={this.state.todos} />
+        <TodoTable todos={this.state.todos} deleteTodo={this.deleteTodo}/>
       </div>
     );
   };
