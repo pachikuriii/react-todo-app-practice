@@ -1,1 +1,8 @@
 /* Write your CSS if you want */
+.todo-list li .off {
+  display: none;
+}
+
+.todo-list li .on {
+  display: inline;
+}
