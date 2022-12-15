@@ -2,8 +2,8 @@ class TodoRow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      className: "view",
-      className2: "edit",
+      viewMode: "on",
+      editMode: "off",
       content: this.props.todo.content
     };
   }
@@ -11,27 +11,24 @@ class TodoRow extends React.Component {
     const todo = this.props.todo;
     return (
       <li>
-        <div className={this.state.className}>
+        <div className={this.state.viewMode}>
           <label>{ todo.content }</label>
         </div>
-        <input className={this.state.className2} type="text" value={this.state.content} onChange={this.handleChange}  />
-        <button className={this.state.className} onClick={() => this.edit()}>編集</button>
-        <button className={this.state.className2} onClick={() => this.doneEdit(todo.id)}>変更</button>
+        <input className={this.state.editMode} type="text" value={this.state.content} onChange={this.handleChange}  />
+        <button className={this.state.viewMode} onClick={() => this.edit()}>編集</button>
+        <button className={this.state.editMode} onClick={() => this.doneEdit(todo.id)}>変更</button>
         <button onClick={() => this.props.deleteTodo(todo.id)}>削除</button>
       </li>
     );
   }
 
   edit = () => {
-    this.setState({ className: "edit" });
-    this.setState({ className2: "view" });
+    this.setState({ viewMode: "off", editMode: "on" });
   };
 
   doneEdit = id => {
     this.props.editTodo(id, this.state.content)
-    this.setState({ className: "view" });
-    this.setState({ className2: "edit" });
-    this.setState({ content: this.props.todo.content });
+    this.setState({ viewMode: "on", editMode: "off", content: this.props.todo.content });
   };
 
   handleChange = event => {
@@ -81,7 +78,7 @@ class TodoInputForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.addMemo(this.state.content)
+    this.props.addTodo(this.state.content)
     this.setState({ content: "" });
   };
 
@@ -95,7 +92,7 @@ class AppTable extends React.Component {
     };
   }
 
-  addMemo = content => {
+  addTodo = content => {
     this.state.todos.push({ id: new Date().getTime(), content: content })
     todoStorage.save(this.state.todos)
     this.setState({todos:this.state.todos});
@@ -113,7 +110,6 @@ class AppTable extends React.Component {
   }
 
   editTodo = (id,content) => {
-    console.log(content)
     const todo = this.state.todos.find((todo) => todo.id === id)
     const index = this.state.todos.indexOf(todo)
     this.state.todos[index].content = content
@@ -124,7 +120,7 @@ class AppTable extends React.Component {
   render() {
     return (
       <div>
-        <TodoInputForm addMemo={this.addMemo} />
+        <TodoInputForm addTodo={this.addTodo} />
         <TodoTable todos={this.state.todos} deleteTodo={this.deleteTodo} editTodo={this.editTodo} />
       </div>
     );

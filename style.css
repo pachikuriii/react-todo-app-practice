@@ -1,12 +1,8 @@
 /* Write your CSS if you want */
-.todo-list li.editing .edit {
-  display: block;
-}
-
-.todo-list li.editing .view {
+.todo-list li .off {
   display: none;
 }
 
-.todo-list li .edit {
-  display: none;
+.todo-list li .on {
+  display: inline;
 }
