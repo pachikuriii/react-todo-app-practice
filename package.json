@@ -1,0 +1,26 @@
+{
+  "name": "react-todo-app-practice",
+  "version": "1.0.0",
+  "description": "フィヨルドブートキャンプの「Reactの基本」プラクティス用リポジトリです。",
+  "main": "todo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pachikuriii/react-todo-app-practice.git"
+  },
+  "author": "Saya Takahashi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pachikuriii/react-todo-app-practice/issues"
+  },
+  "homepage": "https://github.com/pachikuriii/react-todo-app-practice#readme",
+  "devDependencies": {
+    "eslint": "^8.29.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}
