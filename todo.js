@@ -1,13 +1,43 @@
 class TodoRow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      className: "view",
+      className2: "edit",
+      content: this.props.todo.content
+    };
+  }
   render() {
     const todo = this.props.todo;
     return (
-      <li>{todo.content}
-      <button>編集</button>
-      <button onClick={() => this.props.deleteTodo(todo.id)}>削除</button>
+      <li>
+        <div className={this.state.className}>
+          <label>{ todo.content }</label>
+        </div>
+        <input className={this.state.className2} type="text" value={this.state.content} onChange={this.handleChange}  />
+        <button className={this.state.className} onClick={() => this.edit()}>編集</button>
+        <button className={this.state.className2} onClick={() => this.doneEdit(todo.id)}>変更</button>
+        <button onClick={() => this.props.deleteTodo(todo.id)}>削除</button>
       </li>
     );
   }
+
+  edit = () => {
+    this.setState({ className: "edit" });
+    this.setState({ className2: "view" });
+  };
+
+  doneEdit = id => {
+    this.props.editTodo(id, this.state.content)
+    this.setState({ className: "view" });
+    this.setState({ className2: "edit" });
+    this.setState({ content: this.props.todo.content });
+  };
+
+  handleChange = event => {
+    const content = event.target.value;
+    this.setState({ content: content });
+  };
 }
 
 class TodoTable extends React.Component {
@@ -19,12 +49,13 @@ class TodoTable extends React.Component {
           todo={todo}
           key={todo.id} 
           deleteTodo={this.props.deleteTodo}
+          editTodo={this.props.editTodo}
           />
       );
     });
 
     return (
-      <ul>{rows}</ul>
+      <ul className="todo-list">{rows}</ul>
     );
   }
 }
@@ -81,11 +112,20 @@ class AppTable extends React.Component {
     this.setState({ todos: this.state.todos });
   }
 
+  editTodo = (id,content) => {
+    console.log(content)
+    const todo = this.state.todos.find((todo) => todo.id === id)
+    const index = this.state.todos.indexOf(todo)
+    this.state.todos[index].content = content
+    todoStorage.save(this.state.todos)
+    this.setState({ todos: this.state.todos });
+  }
+
   render() {
     return (
       <div>
         <TodoInputForm addMemo={this.addMemo} />
-        <TodoTable todos={this.state.todos} deleteTodo={this.deleteTodo}/>
+        <TodoTable todos={this.state.todos} deleteTodo={this.deleteTodo} editTodo={this.editTodo} />
       </div>
     );
   };
